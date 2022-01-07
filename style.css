@@ -7,3 +7,40 @@
 html {
   font-size: 62.5%;
 }
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 100vh;
+
+  font-size: 2.2rem;
+}
+
+.game--field {
+  display: grid;
+  grid-template-areas:
+    '1 2 3'
+    '4 5 6'
+    '7 8 9';
+  width: 50rem;
+  height: 50rem;
+  border: 0.1rem solid #000;
+}
+
+.game--cell {
+  border: 0.1rem solid #000;
+
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.playerX {
+  background-image: url(x.png);
+}
+
+.playerO {
+  background-image: url(o.png);
+}
