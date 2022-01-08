@@ -57,7 +57,7 @@ h1 {
 .game--cell {
   outline: 0.1rem solid #000;
 
-  background: center/contain no-repeat;
+  background: center no-repeat;
 }
 
 #game--play-again {
