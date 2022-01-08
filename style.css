@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap');
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -9,13 +11,34 @@ html {
 }
 
 body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
   height: 100vh;
 
-  font-size: 2.2rem;
+  background: linear-gradient(
+      to right,
+      transparent 9rem,
+      rgba(255, 0, 0, 0.6) 9rem,
+      rgba(255, 0, 0, 0.6) 9.2rem,
+      transparent 0
+    ),
+    repeating-linear-gradient(white 0, white 2.4rem, teal 2.5rem);
+
+  font-family: 'Architects Daughter', cursive;
+  font-size: 3.6rem;
+}
+
+main {
+  padding-top: 6rem;
+}
+
+h1 {
+  font-size: 5.8rem;
+}
+
+.game--interface {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6rem;
 }
 
 .game--field {
@@ -24,17 +47,22 @@ body {
     '1 2 3'
     '4 5 6'
     '7 8 9';
+
   width: 50rem;
   height: 50rem;
-  border: 0.1rem solid #000;
+
+  overflow: hidden;
 }
 
 .game--cell {
-  border: 0.1rem solid #000;
+  outline: 0.1rem solid #000;
 
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
+  background: center/contain no-repeat;
+}
+
+#game--play-again {
+  display: none;
+  cursor: pointer;
 }
 
 .playerX {

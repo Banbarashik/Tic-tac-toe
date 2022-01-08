@@ -1,15 +1,24 @@
 'use strict';
 // DOM elements
 const cells = document.querySelectorAll('.game--cell');
+const resultMessage = document.getElementById('game--result');
+const playAgain = document.getElementById('game--play-again');
 
+// Players
 const playerX = {
-  name: 'playerX',
+  functionalName: 'playerX',
+  displayName: 'You',
   positions: [],
 };
 const playerO = {
-  name: 'playerO',
+  functionalName: 'playerO',
+  displayName: 'Computer',
   positions: [],
 };
+
+// Initial states
+let currentPlayer = playerX,
+  playing = true;
 
 const winCombinations = [
   [1, 2, 3],
@@ -22,27 +31,31 @@ const winCombinations = [
   [3, 5, 7],
 ];
 
-let currentPlayer = playerX,
-  playing = true;
+const swtichPlayer = () =>
+  (currentPlayer = currentPlayer === playerX ? playerO : playerX);
 
-const makeTurn = function (e) {
-  e.target.classList.add(`${currentPlayer.name}`, 'checked');
+const processTurn = function (elem, pos) {
+  elem.classList.add(`${currentPlayer.functionalName}`, 'checked');
 
-  currentPlayer.positions.push(+e.target.dataset.position);
+  currentPlayer.positions.push(pos);
 
-  // disable the cell after it's checked
-  e.target.removeEventListener('click', makeTurn);
+  elem.removeEventListener('click', userTurn);
+};
+
+const userTurn = function () {
+  processTurn(this, +this.dataset.position);
 
   checkWin();
 
   if (playing) {
-    currentPlayer = playerO;
+    swtichPlayer();
     computerTurn();
   }
 };
 
 const computerTurn = function () {
   let cell, randomPosition;
+
   const chooseRandomCell = function () {
     randomPosition = Math.floor(Math.random() * 9) + 1;
 
@@ -54,41 +67,53 @@ const computerTurn = function () {
   };
   chooseRandomCell();
 
-  cell.classList.add(`${currentPlayer.name}`, 'checked');
-
-  currentPlayer.positions.push(randomPosition);
-
-  // disable the cell after it's checked
-  cell.removeEventListener('click', makeTurn);
+  processTurn(cell, randomPosition);
 
   checkWin();
 
-  currentPlayer = playerX;
+  swtichPlayer();
 };
 
 const checkWin = function () {
-  console.log(playerX.positions);
-  console.log(playerO.positions);
   for (const winCombination of winCombinations) {
     if (winCombination.every(num => currentPlayer.positions.includes(num))) {
-      alert(`${currentPlayer.name} won!`);
+      resultMessage.textContent = `${currentPlayer.displayName} won!`;
 
-      // disable all cells after the game end
-      cells.forEach(cell => cell.removeEventListener('click', makeTurn));
+      cells.forEach(cell => cell.removeEventListener('click', userTurn));
 
-      playing = false;
+      gameOver();
 
       break;
     }
   }
+
   if (
     Array.from(cells).every(cell => cell.classList.contains('checked')) &&
     playing
   ) {
-    alert("It's a draw!");
+    resultMessage.textContent = "It's a draw!";
 
-    playing = false;
+    gameOver();
   }
 };
 
-cells.forEach(cell => cell.addEventListener('click', makeTurn));
+const gameOver = () => {
+  playing = false;
+  playAgain.style.display = 'inline';
+};
+
+const startNewGame = function () {
+  playing = true;
+  playerX.positions = [];
+  playerO.positions = [];
+  resultMessage.textContent = '';
+  playAgain.style.display = 'none';
+
+  cells.forEach(cell => {
+    cell.classList.remove('playerX', 'playerO', 'checked');
+    cell.addEventListener('click', userTurn);
+  });
+};
+
+cells.forEach(cell => cell.addEventListener('click', userTurn));
+playAgain.addEventListener('click', startNewGame);
